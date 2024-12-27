@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Chitter - social network</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+        }
+        .post, .profile, search-results {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Update your profile</h2>
+        <form id="profileForm">
+            <lable for="profilePicture">profilePicture</lable>
+            <input type="file" id="profilePicture" accept="image/*"><br><br>
+
+            <lbale for="bio">Bio:</lbale><br>
+            <textarea id="bio"rows="4" cols="50" placeholder="write your bio..."></textarea><br><br>
+
+            <lable for="occupation">occupation:</lable>
+            <input type="text" id="occupation" placeholder="e.g., Enginner, Artist"<br><br>
+            <button type="button" class="button" onclick="saveProfile()">save profile</button>
+        </form>
+    </div>
+
+    <!--AI Search Section-->
+    <div class="ai search">
+        <h2>Search Topics</h2>
+        <input type="text" id="searchInput" placeholder="Search for science or scholl Topics">
+        <button class="button" onclick="searchTopics()">Search</button>
+        <div id="search-results" class="search-results"></div>
+    </div>
+
+    <--Post Section-->
+        <div class="create-post">
+            <h2>Create a post</h2>
+            <form id="postForm">
+                <textarea id="postContent" rows="4" cols="50" placeholder="write something..."></textarea><br><br>
+                <labe for="postMedia">Attach Media (Picture/Video):</labe>
+                <input type="file" id="postMedia" accept="image/*", video/*><br><br>
+                <button type="button" class="button" onclick="createPost()">post</button>
+            </form>
+        </div>
+
+        <script>
+            // Array to hold posts
+            const post =[];
+
+            //  Function to save user profile
+            function saveProfile() {
+                const profilePicture =document.getElementById('profilePicture').files[0];
+                const bio = document.getElementById('bio').value;
+                const niche = document.getElementById('niche').value;
+                const occupation = document.getElementById('occupation').value;
+
+                alert('profile Updated succefully');
+            }
+
+            // Function to search topics using AI
+            function searchTopics() {
+                const query = document.getElementById('searchInput').value;
+                if (query) {
+                    document.getElementById(searcResults).innerHTML = 'Results for "${query} will appear here.';
+                    // Simulate AI response
+                    setTime(() => {
+                        document.getElementById('searchResults').innerHTML = `
+                        <ul>
+                            <li>AI response 1 about ${query}</li>
+                            <li>AI Response 2 about ${query}</li>
+                            <u/ul>
+                            `;
+                    }, 1000);
+                    }
+                }
+            
+
+            // Function to create  a post
+            function createPost() {
+                const content = document.getElementById('postContent').value;
+                const media = document.getElementById('postMedia').files[0];
+
+                if (content) {
+                    const newPost ={
+                        content,
+                        media,
+                        likes: 0,
+                        comments: []
+                    };
+                    posts.push(newPost);
+                    dispalyPosts()
+                }
+            }
+            
+            //  Function to dispaly posts
+            function displayPosts() {
+                const postsContainer = document.getElementById('posts');
+                postsContainer.innerHTML ='<h2>Recent Posts</h2>';
+                posts.forEach((post, index) => {
+                    const postElement = document.createElement('div');
+                    postElement.className ='post';
+                    postElement.innerHTML = `
+                    <p>${post.content}</p>
+                    ${post.media? `<p>Media attached</p>` :``}
+                    <button class="button" onclick="likePost(${index})">Like (${post.like})</button>
+                    <button class="button" onclick="commentPost(${index})">Comment</button>
+                    <div id="comment-${index}">
+                        ${post.comment.map(comment => `<p>${comment}</p>`).join(``)}
+                        </div>
+                        `;
+                        postsCotainer.appendChild(postElement);
+
+                });
+            }
+
+            //  Function to like a post
+            function likePost(index) {
+                posts[index].likes += 1;
+                displayPosts();
+            }
+
+            //  Function to comment on a post
+            function commentPost(index) {
+                const comment = prompt('write a comment:');
+                if (comment) {
+                    posts[index].comment.push(comment);
+                    displayPosts();
+                }
+            }
+        </script>
+
+    <div id="login-container">
+        <h1>Chitter</h1>
+        <form id="registerForm">
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="password" id="password" placeholder="password" required>
+            <button type="submit">register / Login</button></button>
+        </form>
+    </div>
+
+    <div id="chat-container" class="hidden"></div>
+    <header>
+        <h1><i>Chitter</i></i></h1>
+        <button id="logout">Logout</button>
+    </header>
+    <div id="messages">
+        <!-- Chat messages will appear here-->
+    </div>
+
+    <!--Account Creation SEction-->
+    <div class="section">
+        <h2>Create an Account</h2>
+        <form id="accountForm">
+            <lable for="name">Name:</lable>
+            <input type="text" id="name" placeholder="Enter your name" required><br><br>
+
+            <lable for="phone">Phone Number:</lable>
+            <input type="text" id="phone" placeholder="Enter your phone number" required><br><br>
+
+            <label for="dob">Date of birth:</label>
+            <input type="date" id="dob" required><br><br>
+
+            <button type="button" class="button" onclick="createAccount()">createAccount</button>
+        </form>
+    </div>
+
+    <form id="messageForm">
+        <textarea id="messageInput" placeholder="Type ypur message..." required></textarea>
+        <button type="submit"></button>Send</button>
+    </form>
+
+    <div id="location-container">
+        <button id="togglelocation">Activate Live Location</button>
+        <p id="locationStatus"></p>
+    </div>
+    <scrip src="script.js"></scrip>
+
+</body>
+</html>
